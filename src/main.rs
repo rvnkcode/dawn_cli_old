@@ -20,7 +20,7 @@ fn main() {
     conn.execute(
         "CREATE TABLE IF NOT EXISTS todo (
                 id      INTEGER PRIMARY KEY,
-                name    TEXT NOT NULL
+                title   TEXT NOT NULL
             )",
         (),
     ).expect("Error");
