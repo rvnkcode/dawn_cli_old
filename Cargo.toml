@@ -1,7 +1,12 @@
 [package]
 name = "dawn_cli"
 version = "0.1.0"
+authors = ["KSY <sykim.p508@gmail.com>"]
 edition = "2021"
+description = "Command-line to-do management"
+repository = "https://github.com/rvnkcode/dawn_cli"
+license = "MIT"
+categories = ["command-line-utilities"]
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
