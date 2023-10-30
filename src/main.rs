@@ -1,5 +1,12 @@
 use rusqlite::Connection;
 use std::fs::create_dir;
+#[warn(dead_code)]
+struct Todo {
+    id: u32,
+    title: String,
+    is_completed: bool
+    // TODO: Handling date and time with Rust
+}
 
 fn main() {
     let path = dirs::home_dir().unwrap().join(".dawn");
