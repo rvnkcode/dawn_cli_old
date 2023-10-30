@@ -12,3 +12,4 @@ categories = ["command-line-utilities"]
 
 [dependencies]
 dirs = "5.0.1"
+rusqlite = { version = "0.29.0", features = ["bundled"] }
