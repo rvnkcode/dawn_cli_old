@@ -5,7 +5,7 @@ use std::{fs::create_dir, path::PathBuf};
 struct Todo {
     id: u32,
     title: String,
-    is_completed: bool
+    is_completed: bool,
     // TODO: Handling date and time with Rust
 }
 
@@ -14,18 +14,8 @@ fn main() {
     // println!("{:}", path.display()); // Debug
     check_directory(&path);
 
-/* 
-    // Create sqlite .db file and todo table
     let path = path.join("todo.db");
-    let conn = Connection::open(&path).expect("Error");
-    conn.execute(
-        "CREATE TABLE IF NOT EXISTS Todo (
-                Id          INTEGER PRIMARY KEY,
-                Title       TEXT    NOT NULL
-                IsCompleted BOOLEAN DEFAULT 0
-            )",
-        (),
-    ).expect("Error"); */
+    initialize_db(&path);
 }
 
 fn define_path() -> PathBuf {
@@ -44,4 +34,11 @@ fn check_directory(path: &PathBuf) {
         create_dir(&path).expect("Error");
         println!("...Directory created");
     }
+}
+
+fn initialize_db(path: &PathBuf) {
+    let conn = Connection::open(&path).expect("Error");
+    conn.execute(include_str!("./sql/schema.sql"), ())
+        .expect("Error");
+    println!("...DB initialized");
 }
