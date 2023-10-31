@@ -46,7 +46,8 @@ fn check_db(path: &PathBuf) {
 
 fn initialize_db(conn: &Connection) {
     conn.execute(include_str!("./sql/schema.sql"), ())
-        .expect("Error");
+        .expect("Table creation failed");
+    conn.execute(include_str!("./sql/trigger.sql"), ()).expect("err");
     println!("...DB initialized");
 }
 
