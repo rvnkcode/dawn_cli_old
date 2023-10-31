@@ -1,0 +1,6 @@
+CREATE TABLE
+  IF NOT EXISTS todo (
+    id INTEGER PRIMARY KEY,
+    title TEXT NOT NULL,
+    is_completed BOOLEAN DEFAULT 0
+  );
