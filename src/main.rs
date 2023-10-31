@@ -18,6 +18,8 @@ fn main() {
     check_db(&path);
 }
 
+// Helper functions
+
 fn define_directory() -> PathBuf {
     let path = match dirs::home_dir() {
         Some(p) => p,
@@ -28,18 +30,14 @@ fn define_directory() -> PathBuf {
 }
 
 fn check_directory(path: &PathBuf) {
-    if path.exists() {
-        println!("...Directory checked");
-    } else {
+    if !path.exists() {
         create_dir(&path).expect("Directory creation failed");
         println!("...Directory created");
     }
 }
 
 fn check_db(path: &PathBuf) {
-    if path.exists() {
-        println!("...DB checked");
-    } else {
+    if !path.exists() {
         let conn = Connection::open(&path).expect("Connection open failed");
         initialize_db(&conn);
         seeding(&conn);
