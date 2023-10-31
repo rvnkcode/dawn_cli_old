@@ -1,0 +1,8 @@
+{
+  "connections": [
+    {
+      "name": "sqlite3-project",
+      "adapter": "sqlite3"
+    }
+  ]
+}
