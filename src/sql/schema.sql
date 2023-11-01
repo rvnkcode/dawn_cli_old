@@ -7,7 +7,6 @@ CREATE TABLE
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
   );
 
--- TODO: Test trigger for multiple updates
 CREATE TRIGGER updated_at_todo
 UPDATE OF title,
 is_completed ON todo BEGIN
