@@ -19,7 +19,6 @@ fn main() {
 }
 
 // Helper functions
-
 fn define_directory() -> PathBuf {
     let path = match dirs::home_dir() {
         Some(p) => p,
