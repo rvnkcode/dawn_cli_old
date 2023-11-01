@@ -23,8 +23,8 @@ enum Commands {
 #[derive(Args)]
 pub struct AddArgs {
     title: String,
-    /* #[arg(short, long)]
-    check: Option<bool>, */
+    #[arg(short, long, default_value_t = false)]
+    check: bool, 
 }
 
 fn main() {
@@ -39,6 +39,7 @@ fn main() {
 
     match &cli.command {
         Commands::Add(todo) => {
+            // TODO: add check property
             create_todo(&todo.title, &path);
         }
     }
