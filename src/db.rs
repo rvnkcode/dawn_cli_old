@@ -1,4 +1,4 @@
-use rusqlite::Connection;
+use rusqlite::{Connection, params};
 use std::{fs::create_dir, path::PathBuf};
 
 pub fn define_directory() -> PathBuf {
@@ -40,4 +40,13 @@ pub fn seeding(conn: &Connection) {
             .expect("Seeding failed");
         println!("...Seeding completed");
     }
+}
+
+pub fn create_todo(title: &String, path: &PathBuf) {
+    let conn = Connection::open(path).expect("Connection open failed");
+    conn.execute(
+        "INSERT INTO todo (title) VALUES (?1)",
+        [title],
+    )
+    .expect("Failed to create To-Do");
 }

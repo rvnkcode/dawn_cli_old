@@ -1,13 +1,30 @@
+use clap::{Args, Parser, Subcommand};
 use db::{check_db, check_directory, define_directory};
 
-mod db;
+use crate::db::create_todo;
 
-#[warn(dead_code)]
-struct Todo {
-    id: u32,
+mod db;
+mod todo;
+
+#[derive(Parser)]
+#[command(author, version, about, long_about = None)]
+#[command(propagate_version = true)]
+pub struct Cli {
+    #[command(subcommand)]
+    command: Commands,
+}
+
+#[derive(Subcommand)]
+enum Commands {
+    /// Add a new To-Do
+    Add(AddArgs),
+}
+
+#[derive(Args)]
+pub struct AddArgs {
     title: String,
-    is_completed: bool,
-    // TODO: Handling date and time with Rust
+    /* #[arg(short, long)]
+    check: Option<bool>, */
 }
 
 fn main() {
@@ -17,4 +34,12 @@ fn main() {
 
     let path = path.join("todo.db");
     check_db(&path);
+
+    let cli = Cli::parse();
+
+    match &cli.command {
+        Commands::Add(todo) => {
+            create_todo(&todo.title, &path);
+        }
+    }
 }
