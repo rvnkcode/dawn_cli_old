@@ -1,4 +1,4 @@
-use rusqlite::{Connection, params};
+use rusqlite::Connection;
 use std::{fs::create_dir, path::PathBuf};
 
 pub fn define_directory() -> PathBuf {
