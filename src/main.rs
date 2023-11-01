@@ -1,5 +1,6 @@
-use rusqlite::Connection;
-use std::{fs::create_dir, path::PathBuf};
+use db::{check_db, check_directory, define_directory};
+
+mod db;
 
 #[warn(dead_code)]
 struct Todo {
@@ -16,46 +17,4 @@ fn main() {
 
     let path = path.join("todo.db");
     check_db(&path);
-}
-
-// Helper functions
-fn define_directory() -> PathBuf {
-    let path = match dirs::home_dir() {
-        Some(p) => p,
-        None => PathBuf::new(),
-    };
-
-    path.join(".dawn")
-}
-
-fn check_directory(path: &PathBuf) {
-    if !path.exists() {
-        create_dir(&path).expect("Directory creation failed");
-        println!("...Directory created");
-    }
-}
-
-fn check_db(path: &PathBuf) {
-    if !path.exists() {
-        let conn = Connection::open(&path).expect("Connection open failed");
-        initialize_db(&conn);
-        seeding(&conn);
-    }
-}
-
-fn initialize_db(conn: &Connection) {
-    conn.execute_batch(include_str!("./sql/schema.sql"))
-        .expect("Table creation failed");
-    println!("...DB initialized");
-}
-
-fn seeding(conn: &Connection) {
-    let count: u32 = conn
-        .query_row("SELECT COUNT(*) FROM todo", [], |row| row.get(0))
-        .expect("To-do count query failed");
-    if count < 1 {
-        conn.execute(include_str!("./sql/seed.sql"), ())
-            .expect("Seeding failed");
-        println!("...Seeding completed");
-    }
 }
