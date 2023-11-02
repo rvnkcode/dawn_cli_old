@@ -13,7 +13,8 @@ pub struct Cli {
 pub enum Commands {
     /// Add a new To-Do
     Add(AddArgs),
-    Ls,
+    /// List To-Dos
+    Ls(ListArgs),
 }
 
 #[derive(Args)]
