@@ -48,14 +48,28 @@ pub fn create_todo(todo: &AddArgs, path: &PathBuf) {
 pub fn get_todos(path: &PathBuf) -> Vec<Todo> {
     let conn = Connection::open(&path).unwrap();
     let mut stmt = conn
-        .prepare("SELECT id, title, is_completed FROM todo WHERE is_completed = false")
+        .prepare("SELECT id, title FROM todo WHERE is_completed = false")
         .unwrap();
 
     stmt.query_map([], |row| {
         Ok(Todo {
             id: row.get(0)?,
             title: row.get(1)?,
-            is_completed: row.get(2)?,
+        })
+    })
+    .unwrap()
+    .map(|r| r.unwrap())
+    .collect::<Vec<Todo>>()
+}
+
+pub fn get_all_todos(path: &PathBuf) -> Vec<Todo> {
+    let conn = Connection::open(&path).unwrap();
+    let mut stmt = conn.prepare("SELECT id, title FROM todo").unwrap();
+
+    stmt.query_map([], |row| {
+        Ok(Todo {
+            id: row.get(0)?,
+            title: row.get(1)?,
         })
     })
     .unwrap()
