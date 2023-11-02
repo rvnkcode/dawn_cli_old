@@ -1,4 +1,4 @@
-use crate::cli::AddArgs;
+use crate::{cli::AddArgs, todo::Todo};
 use rusqlite::Connection;
 use std::path::PathBuf;
 
@@ -43,4 +43,22 @@ pub fn create_todo(todo: &AddArgs, path: &PathBuf) {
         Ok(result) => println!("Created task {:?}", result),
         Err(e) => panic!("Failed to create a new To-Do: {:?}", e),
     };
+}
+
+pub fn get_todos(path: &PathBuf) -> Vec<Todo> {
+    let conn = Connection::open(&path).unwrap();
+    let mut stmt = conn
+        .prepare("SELECT id, title, is_completed FROM todo")
+        .unwrap();
+
+    stmt.query_map([], |row| {
+        Ok(Todo {
+            id: row.get(0)?,
+            title: row.get(1)?,
+            is_completed: row.get(2)?,
+        })
+    })
+    .unwrap()
+    .map(|r| r.unwrap())
+    .collect::<Vec<Todo>>()
 }

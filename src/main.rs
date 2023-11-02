@@ -6,6 +6,7 @@ use db::{check_db, create_todo};
 mod cli;
 mod config;
 mod db;
+mod todo;
 
 fn main() {
     let path = define_directory();

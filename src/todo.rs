@@ -1,6 +1,5 @@
 pub struct Todo {
-    id: u32,
-    title: String,
-    is_completed: bool,
-    // TODO: Handling date and time with Rust
+    pub id: u32,
+    pub title: String,
+    pub is_completed: bool,
 }
