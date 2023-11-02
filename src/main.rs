@@ -1,8 +1,8 @@
 use clap::{Args, Parser, Subcommand};
-use db::{check_db, check_directory, define_directory};
+use config::{check_directory, define_directory};
+use db::{check_db, create_todo};
 
-use crate::db::create_todo;
-
+mod config;
 mod db;
 mod todo;
 

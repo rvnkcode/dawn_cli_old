@@ -1,5 +1,5 @@
 use rusqlite::Connection;
-use std::{fs::create_dir, path::PathBuf};
+use std::path::PathBuf;
 
 use crate::AddArgs;
 
