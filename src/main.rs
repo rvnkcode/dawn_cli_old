@@ -2,10 +2,12 @@ use clap::Parser;
 use cli::{Cli, Commands};
 use config::{check_directory, define_directory};
 use db::{check_db, create_todo, get_todos};
+use table::print_list;
 
 mod cli;
 mod config;
 mod db;
+mod table;
 mod todo;
 
 fn main() {
@@ -23,9 +25,7 @@ fn main() {
         }
         Commands::Ls => {
             let list = get_todos(&path);
-            for todo in list {
-                println!("{0} {1}", todo.id, todo.title);
-            }
+            print_list(&list);
         }
     }
 }
