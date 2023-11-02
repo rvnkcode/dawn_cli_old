@@ -39,8 +39,7 @@ fn main() {
 
     match &cli.command {
         Commands::Add(todo) => {
-            // TODO: add check property
-            create_todo(&todo.title, &path);
+            create_todo(&todo, &path);
         }
     }
 }

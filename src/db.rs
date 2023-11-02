@@ -1,21 +1,7 @@
 use rusqlite::Connection;
 use std::{fs::create_dir, path::PathBuf};
 
-pub fn define_directory() -> PathBuf {
-    let path = match dirs::home_dir() {
-        Some(p) => p,
-        None => PathBuf::new(),
-    };
-
-    path.join(".dawn")
-}
-
-pub fn check_directory(path: &PathBuf) {
-    if !path.exists() {
-        create_dir(&path).expect("Directory creation failed");
-        println!("...Directory created");
-    }
-}
+use crate::AddArgs;
 
 pub fn check_db(path: &PathBuf) {
     if !path.exists() {
@@ -42,11 +28,11 @@ pub fn seeding(conn: &Connection) {
     }
 }
 
-pub fn create_todo(title: &String, path: &PathBuf) {
+pub fn create_todo(todo: &AddArgs, path: &PathBuf) {
     let conn = Connection::open(path).expect("Connection open failed");
     conn.execute(
-        "INSERT INTO todo (title) VALUES (?1)",
-        [title],
+        "INSERT INTO todo (title, is_completed) VALUES (?1, ?2)",
+        (&todo.title, &todo.check),
     )
     .expect("Failed to create To-Do");
 }
