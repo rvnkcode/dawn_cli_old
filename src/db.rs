@@ -1,7 +1,6 @@
+use crate::cli::AddArgs;
 use rusqlite::Connection;
 use std::path::PathBuf;
-
-use crate::AddArgs;
 
 pub fn check_db(path: &PathBuf) {
     if !path.exists() {

@@ -1,31 +1,11 @@
-use clap::{Args, Parser, Subcommand};
+use clap::Parser;
+use cli::{Cli, Commands};
 use config::{check_directory, define_directory};
 use db::{check_db, create_todo};
 
+mod cli;
 mod config;
 mod db;
-mod todo;
-
-#[derive(Parser)]
-#[command(author, version, about, long_about = None)]
-#[command(propagate_version = true)]
-pub struct Cli {
-    #[command(subcommand)]
-    command: Commands,
-}
-
-#[derive(Subcommand)]
-enum Commands {
-    /// Add a new To-Do
-    Add(AddArgs),
-}
-
-#[derive(Args)]
-pub struct AddArgs {
-    title: String,
-    #[arg(short, long, default_value_t = false)]
-    check: bool,
-}
 
 fn main() {
     let path = define_directory();
