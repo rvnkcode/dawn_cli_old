@@ -23,7 +23,9 @@ fn main() {
         Commands::Add(todo) => {
             create_todo(&todo, &path);
         }
-        Commands::Ls => {
+        Commands::Ls(list_args) => {
+            println!("{:?}", list_args);
+            
             let list = get_todos(&path);
             print_list(&list);
         }

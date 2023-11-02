@@ -1,4 +1,4 @@
-use clap::{Args, Parser, Subcommand};
+use clap::{Args, Parser, Subcommand, ValueEnum};
 
 #[derive(Parser)]
 #[command(bin_name = "dawn")]
@@ -22,4 +22,16 @@ pub struct AddArgs {
     pub title: String,
     #[arg(short, long, default_value_t = false)]
     pub check: bool,
+}
+
+#[derive(Args, Debug)]
+pub struct ListArgs {
+    #[arg(value_enum, short)]
+    pub filter: Option<ListFilters>,
+}
+
+#[derive(ValueEnum, Clone, Debug)]
+pub enum ListFilters {
+    All,
+    End,
 }
