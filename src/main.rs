@@ -24,7 +24,7 @@ enum Commands {
 pub struct AddArgs {
     title: String,
     #[arg(short, long, default_value_t = false)]
-    check: bool, 
+    check: bool,
 }
 
 fn main() {
