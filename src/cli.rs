@@ -13,6 +13,7 @@ pub struct Cli {
 pub enum Commands {
     /// Add a new To-Do
     Add(AddArgs),
+    Ls,
 }
 
 #[derive(Args)]
@@ -21,4 +22,3 @@ pub struct AddArgs {
     #[arg(short, long, default_value_t = false)]
     pub check: bool,
 }
-

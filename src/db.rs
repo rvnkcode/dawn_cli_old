@@ -40,7 +40,7 @@ pub fn create_todo(todo: &AddArgs, path: &PathBuf) {
         [&todo.title],
         |row| row.get::<_, u32>(0),
     ) {
-        Ok(result) => println!("Created task {:?}", result),
+        Ok(result) => println!("Created task {}", result),
         Err(e) => panic!("Failed to create a new To-Do: {:?}", e),
     };
 }
@@ -48,7 +48,7 @@ pub fn create_todo(todo: &AddArgs, path: &PathBuf) {
 pub fn get_todos(path: &PathBuf) -> Vec<Todo> {
     let conn = Connection::open(&path).unwrap();
     let mut stmt = conn
-        .prepare("SELECT id, title, is_completed FROM todo")
+        .prepare("SELECT id, title, is_completed FROM todo WHERE is_completed = false")
         .unwrap();
 
     stmt.query_map([], |row| {
