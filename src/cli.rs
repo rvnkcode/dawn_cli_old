@@ -1,6 +1,7 @@
 use clap::{Args, Parser, Subcommand};
 
 #[derive(Parser)]
+#[command(bin_name = "dawn")]
 #[command(author, version, about, long_about = None)]
 #[command(propagate_version = true)]
 pub struct Cli {
