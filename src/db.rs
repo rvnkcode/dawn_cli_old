@@ -1,4 +1,7 @@
-use crate::{cli::AddArgs, todo::Todo};
+use crate::{
+    cli::{AddArgs, EditArgs},
+    todo::Todo,
+};
 use rusqlite::Connection;
 use std::path::PathBuf;
 
@@ -94,6 +97,15 @@ pub fn get_completed_todos(path: &PathBuf) -> Vec<Todo> {
     .collect::<Vec<Todo>>()
 }
 
+pub fn is_todo_exists(conn: &Connection, id: &u32) -> bool {
+    conn.query_row(
+        "SELECT EXISTS(SELECT 1 FROM todo WHERE id = (?1))",
+        [&id],
+        |row| row.get(0),
+    )
+    .unwrap()
+}
+
 pub fn complete_todos(path: &PathBuf, ids: &Vec<u32>) {
     let conn = Connection::open(&path).unwrap();
     for id in ids {
@@ -110,6 +122,22 @@ pub fn uncheck_todos(path: &PathBuf, ids: &Vec<u32>) {
             .expect("Failed to complete To-Do");
     }
     println!("Unfinished To-Do {:?}", &ids);
+}
+
+pub fn update_title(path: &PathBuf, todo: &EditArgs) {
+    let conn = Connection::open(&path).unwrap();
+
+    if is_todo_exists(&conn, &todo.id) {
+        conn.execute(
+            "UPDATE todo SET title = (?1) WHERE id = (?2)",
+            (&todo.title, &todo.id),
+        )
+        .expect("Failed to update To-Do");
+
+        println!("Updated To-Do {:?}", &todo.id);
+    } else {
+        println!("Check again your input: ID {:?}", &todo.id);
+    }
 }
 
 pub fn restore_seeds(path: &PathBuf) {

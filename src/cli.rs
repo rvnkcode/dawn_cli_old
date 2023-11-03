@@ -17,6 +17,8 @@ pub enum Commands {
     Done(CheckArgs),
     /// Revert To-Dos to an unfinished state
     Undone(CheckArgs),
+    /// Modify a To-Do
+    Edit(EditArgs),
     /// Reset DB and restore seed. Only for development!
     #[command(hide = true)]
     Seed,
@@ -44,4 +46,10 @@ pub struct CheckArgs {
 pub enum ListFilters {
     All,
     End,
+}
+
+#[derive(Args)]
+pub struct EditArgs {
+    pub id: u32,
+    pub title: String
 }
