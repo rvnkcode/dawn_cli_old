@@ -94,6 +94,15 @@ pub fn get_completed_todos(path: &PathBuf) -> Vec<Todo> {
     .collect::<Vec<Todo>>()
 }
 
+pub fn complete_todos(path: &PathBuf, ids: &Vec<u32>) {
+    let conn = Connection::open(&path).unwrap();
+    for id in ids {
+        conn.execute("UPDATE todo SET is_completed = 1 WHERE (?1)", [&id])
+            .expect("Failed to complete To-Do");
+    }
+    println!("Completed To-Do {:?}", &ids);
+}
+
 pub fn restore_seeds(path: &PathBuf) {
     let conn = Connection::open(&path).unwrap();
     conn.execute("DELETE FROM todo", ()).ok();

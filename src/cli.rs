@@ -13,6 +13,9 @@ pub enum Commands {
     Add(AddArgs),
     /// List To-Dos
     Ls(ListArgs),
+    /// Complete a To-Do
+    Check(CheckArgs),
+    /// Reset DB and restore seed. Only for development!
     #[command(hide = true)]
     Seed,
 }
@@ -28,6 +31,11 @@ pub struct AddArgs {
 pub struct ListArgs {
     #[arg(value_enum, short)]
     pub filter: Option<ListFilters>,
+}
+
+#[derive(Args, Debug)]
+pub struct CheckArgs {
+    pub ids: Vec<u32>
 }
 
 #[derive(ValueEnum, Clone, Debug)]
