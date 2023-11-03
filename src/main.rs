@@ -1,8 +1,11 @@
 use clap::Parser;
 use cli::{Cli, Commands};
 use config::{check_directory, define_directory};
-use db::{check_db, create_todo, get_todos};
+use db::{check_db, create_todo, get_all_todos, get_completed_todos, get_todos};
 use table::print_list;
+use todo::Todo;
+
+use crate::cli::ListFilters;
 
 mod cli;
 mod config;
@@ -24,9 +27,12 @@ fn main() {
             create_todo(&todo, &path);
         }
         Commands::Ls(list_args) => {
-            println!("{:?}", list_args);
-            
-            let list = get_todos(&path);
+            let list: Vec<Todo> = match &list_args.filter {
+                Some(ListFilters::All) => get_all_todos(&path),
+                Some(ListFilters::End) => get_completed_todos(&path),
+                None => get_todos(&path),
+            };
+
             print_list(&list);
         }
     }

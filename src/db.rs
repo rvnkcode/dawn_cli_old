@@ -76,3 +76,20 @@ pub fn get_all_todos(path: &PathBuf) -> Vec<Todo> {
     .map(|r| r.unwrap())
     .collect::<Vec<Todo>>()
 }
+
+pub fn get_completed_todos(path: &PathBuf) -> Vec<Todo> {
+    let conn = Connection::open(&path).unwrap();
+    let mut stmt = conn
+        .prepare("SELECT id, title FROM todo WHERE is_completed = true")
+        .unwrap();
+
+    stmt.query_map([], |row| {
+        Ok(Todo {
+            id: row.get(0)?,
+            title: row.get(1)?,
+        })
+    })
+    .unwrap()
+    .map(|r| r.unwrap())
+    .collect::<Vec<Todo>>()
+}
