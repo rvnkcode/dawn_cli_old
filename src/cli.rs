@@ -13,8 +13,10 @@ pub enum Commands {
     Add(AddArgs),
     /// List To-Dos
     Ls(ListArgs),
-    /// Complete a To-Do
-    Check(CheckArgs),
+    /// Complete To-Dos
+    Done(CheckArgs),
+    /// Revert To-Dos to an unfinished state
+    Undone(CheckArgs),
     /// Reset DB and restore seed. Only for development!
     #[command(hide = true)]
     Seed,

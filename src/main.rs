@@ -3,7 +3,7 @@ use cli::{Cli, Commands};
 use config::{check_directory, define_directory};
 use db::{
     check_db, complete_todos, create_todo, get_all_todos, get_completed_todos, get_todos,
-    restore_seeds,
+    restore_seeds, uncheck_todos,
 };
 use table::print_list;
 use todo::Todo;
@@ -35,7 +35,8 @@ fn main() {
             };
             print_list(&list);
         }
-        Commands::Check(check_args) => complete_todos(&path, &check_args.ids),
+        Commands::Done(check_args) => complete_todos(&path, &check_args.ids),
+        Commands::Undone(check_args) => uncheck_todos(&path, &check_args.ids),
         Commands::Seed => restore_seeds(&path),
     }
 }
