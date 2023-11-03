@@ -1,7 +1,7 @@
 use clap::Parser;
 use cli::{Cli, Commands};
 use config::{check_directory, define_directory};
-use db::{check_db, create_todo, get_all_todos, get_completed_todos, get_todos};
+use db::{check_db, create_todo, get_all_todos, get_completed_todos, get_todos, restore_seeds};
 use table::print_list;
 use todo::Todo;
 
@@ -32,8 +32,10 @@ fn main() {
                 Some(ListFilters::End) => get_completed_todos(&path),
                 None => get_todos(&path),
             };
-
             print_list(&list);
+        }
+        Commands::Seed => {
+            restore_seeds(&path);
         }
     }
 }

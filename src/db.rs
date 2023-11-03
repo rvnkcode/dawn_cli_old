@@ -93,3 +93,9 @@ pub fn get_completed_todos(path: &PathBuf) -> Vec<Todo> {
     .map(|r| r.unwrap())
     .collect::<Vec<Todo>>()
 }
+
+pub fn restore_seeds(path: &PathBuf) {
+    let conn = Connection::open(&path).unwrap();
+    conn.execute("DELETE FROM todo", ()).ok();
+    seeding(&conn);
+}

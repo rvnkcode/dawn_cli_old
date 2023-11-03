@@ -13,6 +13,8 @@ pub enum Commands {
     Add(AddArgs),
     /// List To-Dos
     Ls(ListArgs),
+    #[command(hide = true)]
+    Seed,
 }
 
 #[derive(Args)]
