@@ -5,6 +5,7 @@ CREATE TABLE
     is_completed BOOLEAN DEFAULT 0,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    -- TODO: Add completed_at column
   );
 
 CREATE TRIGGER updated_at_todo
