@@ -2,7 +2,7 @@ use crate::{
     cli::{AddArgs, EditArgs},
     todo::Todo,
 };
-use rusqlite::Connection;
+use rusqlite::{params_from_iter, Connection};
 use std::path::PathBuf;
 
 pub fn check_db(path: &PathBuf) {
@@ -107,21 +107,41 @@ pub fn is_todo_exists(conn: &Connection, id: &u32) -> bool {
 }
 
 pub fn complete_todos(path: &PathBuf, ids: &Vec<u32>) {
+    let mut result = ids.clone();
     let conn = Connection::open(&path).unwrap();
-    for id in ids {
-        conn.execute("UPDATE todo SET is_completed = 1 WHERE (?1)", [&id])
-            .expect("Failed to complete To-Do");
+
+    result.retain(|id| is_todo_exists(&conn, &id));
+    let count = result.len();
+    if count > 0 {
+        conn.execute(
+            &format!(
+                "UPDATE todo SET is_completed = 1 WHERE id IN ({}) AND is_completed = 0",
+                repeat_vars(count)
+            ),
+            params_from_iter(&result),
+        )
+        .expect("Update faild");
+        println!("Completed To-Do {:?}", &result);
     }
-    println!("Completed To-Do {:?}", &ids);
 }
 
 pub fn uncheck_todos(path: &PathBuf, ids: &Vec<u32>) {
+    let mut result = ids.clone();
     let conn = Connection::open(&path).unwrap();
-    for id in ids {
-        conn.execute("UPDATE todo SET is_completed = 0 WHERE (?1)", [&id])
-            .expect("Failed to complete To-Do");
+
+    result.retain(|id| is_todo_exists(&conn, &id));
+    let count = result.len();
+    if count > 0 {
+        conn.execute(
+            &format!(
+                "UPDATE todo SET is_completed = 0 WHERE id IN ({}) AND is_completed = 1",
+                repeat_vars(count)
+            ),
+            params_from_iter(&result),
+        )
+        .expect("Update faild");
+        println!("Unfinished To-Do {:?}", &result);
     }
-    println!("Unfinished To-Do {:?}", &ids);
 }
 
 pub fn update_title(path: &PathBuf, todo: &EditArgs) {
@@ -144,4 +164,13 @@ pub fn restore_seeds(path: &PathBuf) {
     let conn = Connection::open(&path).unwrap();
     conn.execute("DELETE FROM todo", ()).ok();
     seeding(&conn);
+}
+
+// Ref: https://docs.rs/rusqlite/latest/rusqlite/struct.ParamsFromIter.html#realistic-use-case
+fn repeat_vars(count: usize) -> String {
+    assert_ne!(count, 0);
+    let mut s = "?,".repeat(count);
+    // Remove trailing comma
+    s.pop();
+    s
 }
