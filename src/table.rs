@@ -1,4 +1,4 @@
-use prettytable::{Table, row, format};
+use prettytable::{format, row, Table};
 
 use crate::todo::Todo;
 
