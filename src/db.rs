@@ -35,7 +35,7 @@ pub fn create_todo(todo: &AddArgs, path: &PathBuf) {
 pub fn get_todos(path: &PathBuf) -> Vec<Todo> {
     let conn = Connection::open(&path).unwrap();
     let mut stmt = conn
-        .prepare("SELECT id, title FROM todo WHERE is_completed = false")
+        .prepare("SELECT id, title FROM todo WHERE is_completed = 0 AND is_deleted = 0")
         .unwrap();
 
     stmt.query_map([], |row| {
@@ -53,7 +53,7 @@ pub fn get_todos(path: &PathBuf) -> Vec<Todo> {
 pub fn get_all_todos(path: &PathBuf) -> Vec<Todo> {
     let conn = Connection::open(&path).unwrap();
     let mut stmt = conn
-        .prepare("SELECT id, title, completed_at FROM todo")
+        .prepare("SELECT id, title, completed_at FROM todo WHERE is_deleted = 0")
         .unwrap();
 
     stmt.query_map([], |row| {
@@ -71,7 +71,9 @@ pub fn get_all_todos(path: &PathBuf) -> Vec<Todo> {
 pub fn get_completed_todos(path: &PathBuf) -> Vec<Todo> {
     let conn = Connection::open(&path).unwrap();
     let mut stmt = conn
-        .prepare("SELECT id, title, completed_at FROM todo WHERE is_completed = true")
+        .prepare(
+            "SELECT id, title, completed_at FROM todo WHERE is_completed = 1 AND is_deleted = 0",
+        )
         .unwrap();
 
     stmt.query_map([], |row| {
@@ -88,7 +90,7 @@ pub fn get_completed_todos(path: &PathBuf) -> Vec<Todo> {
 
 pub fn is_todo_exists(conn: &Connection, id: &u32) -> bool {
     conn.query_row(
-        "SELECT EXISTS(SELECT 1 FROM todo WHERE id = (?1))",
+        "SELECT EXISTS(SELECT 1 FROM todo WHERE id = (?1) AND is_deleted = 0)",
         [&id],
         |row| row.get(0),
     )
