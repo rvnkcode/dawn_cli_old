@@ -39,7 +39,7 @@ pub struct ListArgs {
 
 #[derive(Args, Debug)]
 pub struct CheckArgs {
-    pub ids: Vec<u32>
+    pub ids: Vec<u32>,
 }
 
 #[derive(ValueEnum, Clone, Debug)]
