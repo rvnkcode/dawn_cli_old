@@ -23,7 +23,6 @@ fn main() {
     initialize_db(&path);
 
     let cli = Cli::parse();
-
     match &cli.command {
         Commands::Add(todo) => create_todo(&todo, &path),
         Commands::Ls(list_args) => match &list_args.filter {
