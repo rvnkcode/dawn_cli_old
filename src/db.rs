@@ -5,21 +5,16 @@ use crate::{
 use rusqlite::{params_from_iter, Connection};
 use std::path::PathBuf;
 
-pub fn check_db(path: &PathBuf) {
+pub fn initialize_db(path: &PathBuf) {
     if !path.exists() {
         let conn = Connection::open(&path).unwrap();
-        initialize_db(&conn);
-        seeding(&conn);
+        conn.execute_batch(include_str!("./sql/schema.sql"))
+            .expect("Table creation failed");
+        println!("...DB initialized");
     }
 }
 
-pub fn initialize_db(conn: &Connection) {
-    conn.execute_batch(include_str!("./sql/schema.sql"))
-        .expect("Table creation failed");
-    println!("...DB initialized");
-}
-
-pub fn seeding(conn: &Connection) {
+fn seeding(conn: &Connection) {
     let count: u32 = conn
         .query_row("SELECT COUNT(*) FROM todo", [], |row| row.get(0))
         .unwrap();

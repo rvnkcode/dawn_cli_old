@@ -2,7 +2,7 @@ use clap::Parser;
 use cli::{Cli, Commands};
 use config::{check_directory, define_directory};
 use db::{
-    check_db, complete_todos, create_todo, get_all_todos, get_completed_todos, get_todos,
+    complete_todos, create_todo, get_all_todos, get_completed_todos, get_todos, initialize_db,
     restore_seeds, uncheck_todos, update_title,
 };
 use table::print_list;
@@ -21,7 +21,7 @@ fn main() {
     check_directory(&path);
 
     let path = path.join("todo.db");
-    check_db(&path);
+    initialize_db(&path);
 
     let cli = Cli::parse();
 
