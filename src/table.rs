@@ -23,7 +23,14 @@ pub fn print_list_with_completion_date(list: &Vec<Todo>) {
         table.add_row(row![
             todo.id,
             todo.title,
-            todo.completed_at.clone().get_or_insert("-".to_string())
+            if todo.completed_at.is_some() {
+                todo.completed_at
+                    .unwrap()
+                    .format("%Y-%m-%d %H:%M")
+                    .to_string()
+            } else {
+                "-".to_string()
+            }
         ]);
     }
 
