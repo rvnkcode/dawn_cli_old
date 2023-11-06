@@ -20,6 +20,8 @@ pub enum Commands {
     Undone(IdsArgs),
     /// Modify a To-Do
     Edit(EditArgs),
+    /// Delete To-Dos
+    Delete(IdsArgs),
     /// Reset DB
     Reset,
     /// Reset DB and restore seed. Only for development!

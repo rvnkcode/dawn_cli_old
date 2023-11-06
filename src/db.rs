@@ -151,6 +151,25 @@ pub fn update_title(path: &PathBuf, todo: &EditArgs) {
     }
 }
 
+pub fn delete_todos(path: &PathBuf, ids: &Vec<u32>) {
+    let mut result = ids.clone();
+    let conn = Connection::open(&path).unwrap();
+
+    result.retain(|id| is_todo_exists(&conn, &id));
+    let count = result.len();
+    if count > 0 {
+        conn.execute(
+            &format!(
+                "UPDATE todo SET is_deleted = 1 WHERE id IN ({})",
+                repeat_vars(count)
+            ),
+            params_from_iter(&result),
+        )
+        .expect("Faild to delete To-Dos");
+        println!("Deleted To-Do {:?}", &result);
+    }
+}
+
 pub fn restore_seeds(path: &PathBuf) {
     let conn = Connection::open(&path).unwrap();
     reset_db_before_seeding(&conn);
