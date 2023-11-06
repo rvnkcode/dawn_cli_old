@@ -1,3 +1,4 @@
+use crate::cli::ListFilters;
 use clap::Parser;
 use cli::{Cli, Commands};
 use config::{check_directory, define_directory};
@@ -6,8 +7,6 @@ use db::{
     restore_seeds, uncheck_todos, update_title,
 };
 use table::{print_list, print_list_with_completion_date};
-
-use crate::cli::ListFilters;
 
 mod cli;
 mod config;
