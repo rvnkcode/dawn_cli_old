@@ -1,4 +1,5 @@
 use clap::{Args, Parser, Subcommand, ValueEnum};
+use std::io::{stdin, stdout, Result, Write};
 
 #[derive(Parser)]
 #[command(bin_name = "dawn", author, version, about, long_about = None)]
@@ -19,6 +20,8 @@ pub enum Commands {
     Undone(CheckArgs),
     /// Modify a To-Do
     Edit(EditArgs),
+    /// Reset DB
+    Reset,
     /// Reset DB and restore seed. Only for development!
     #[command(hide = true)]
     Seed,
@@ -51,5 +54,30 @@ pub enum ListFilters {
 #[derive(Args)]
 pub struct EditArgs {
     pub id: u32,
-    pub title: String
+    pub title: String,
+}
+
+#[derive(PartialEq)]
+pub enum PromptResult {
+    Yes,
+    No,
+}
+
+pub fn propmt_user(prompt: &str) -> Result<Option<PromptResult>> {
+    let mut input = String::new();
+    loop {
+        print!("{prompt} ");
+        stdout().flush()?;
+        input.clear();
+        stdin().read_line(&mut input)?;
+        match input.trim().to_lowercase().as_str() {
+            "y" | "yes" => return Ok(Some(PromptResult::Yes)),
+            "n" | "no" => return Ok(Some(PromptResult::No)),
+            "" => return Ok(None),
+            _ => {
+                println!("Error: Unrecognized option '{}'", input.trim());
+                println!("Note: Press Ctrl+C to exit");
+            }
+        }
+    }
 }

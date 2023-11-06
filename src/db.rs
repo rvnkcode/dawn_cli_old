@@ -14,17 +14,6 @@ pub fn initialize_db(path: &PathBuf) {
     }
 }
 
-fn seeding(conn: &Connection) {
-    let count: u32 = conn
-        .query_row("SELECT COUNT(*) FROM todo", [], |row| row.get(0))
-        .unwrap();
-    if count < 1 {
-        conn.execute(include_str!("./sql/seed.sql"), ())
-            .expect("Seeding failed");
-        println!("...Seeding completed");
-    }
-}
-
 pub fn create_todo(todo: &AddArgs, path: &PathBuf) {
     let conn = Connection::open(&path).unwrap();
     conn.execute(
@@ -63,7 +52,9 @@ pub fn get_todos(path: &PathBuf) -> Vec<Todo> {
 
 pub fn get_all_todos(path: &PathBuf) -> Vec<Todo> {
     let conn = Connection::open(&path).unwrap();
-    let mut stmt = conn.prepare("SELECT id, title, completed_at FROM todo").unwrap();
+    let mut stmt = conn
+        .prepare("SELECT id, title, completed_at FROM todo")
+        .unwrap();
 
     stmt.query_map([], |row| {
         Ok(Todo {
@@ -160,8 +151,29 @@ pub fn update_title(path: &PathBuf, todo: &EditArgs) {
 
 pub fn restore_seeds(path: &PathBuf) {
     let conn = Connection::open(&path).unwrap();
-    conn.execute("DELETE FROM todo", ()).ok();
+    reset_db_before_seeding(&conn);
     seeding(&conn);
+}
+
+fn reset_db_before_seeding(conn: &Connection) {
+    conn.execute("DELETE FROM todo", ()).ok();
+}
+
+fn seeding(conn: &Connection) {
+    let count: u32 = conn
+        .query_row("SELECT COUNT(*) FROM todo", [], |row| row.get(0))
+        .unwrap();
+    if count < 1 {
+        conn.execute(include_str!("./sql/seed.sql"), ())
+            .expect("Seeding failed");
+        println!("...Seeding completed");
+    }
+}
+
+pub fn reset_db(path: &PathBuf) {
+    let conn = Connection::open(&path).unwrap();
+    conn.execute("DELETE FROM todo", ()).ok();
+    println!("...DB reset completed")
 }
 
 // Ref: https://docs.rs/rusqlite/latest/rusqlite/struct.ParamsFromIter.html#realistic-use-case
