@@ -53,6 +53,7 @@ pub fn get_todos(path: &PathBuf) -> Vec<Todo> {
         Ok(Todo {
             id: row.get(0)?,
             title: row.get(1)?,
+            completed_at: None,
         })
     })
     .unwrap()
@@ -62,12 +63,13 @@ pub fn get_todos(path: &PathBuf) -> Vec<Todo> {
 
 pub fn get_all_todos(path: &PathBuf) -> Vec<Todo> {
     let conn = Connection::open(&path).unwrap();
-    let mut stmt = conn.prepare("SELECT id, title FROM todo").unwrap();
+    let mut stmt = conn.prepare("SELECT id, title, completed_at FROM todo").unwrap();
 
     stmt.query_map([], |row| {
         Ok(Todo {
             id: row.get(0)?,
             title: row.get(1)?,
+            completed_at: row.get(2)?,
         })
     })
     .unwrap()
@@ -78,13 +80,14 @@ pub fn get_all_todos(path: &PathBuf) -> Vec<Todo> {
 pub fn get_completed_todos(path: &PathBuf) -> Vec<Todo> {
     let conn = Connection::open(&path).unwrap();
     let mut stmt = conn
-        .prepare("SELECT id, title FROM todo WHERE is_completed = true")
+        .prepare("SELECT id, title, completed_at FROM todo WHERE is_completed = true")
         .unwrap();
 
     stmt.query_map([], |row| {
         Ok(Todo {
             id: row.get(0)?,
             title: row.get(1)?,
+            completed_at: row.get(2)?,
         })
     })
     .unwrap()

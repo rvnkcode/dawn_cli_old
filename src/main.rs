@@ -5,8 +5,7 @@ use db::{
     complete_todos, create_todo, get_all_todos, get_completed_todos, get_todos, initialize_db,
     restore_seeds, uncheck_todos, update_title,
 };
-use table::print_list;
-use todo::Todo;
+use table::{print_list, print_list_with_completion_date};
 
 use crate::cli::ListFilters;
 
@@ -27,14 +26,11 @@ fn main() {
 
     match &cli.command {
         Commands::Add(todo) => create_todo(&todo, &path),
-        Commands::Ls(list_args) => {
-            let list: Vec<Todo> = match &list_args.filter {
-                Some(ListFilters::All) => get_all_todos(&path),
-                Some(ListFilters::End) => get_completed_todos(&path),
-                None => get_todos(&path),
-            };
-            print_list(&list);
-        }
+        Commands::Ls(list_args) => match &list_args.filter {
+            Some(ListFilters::All) => print_list_with_completion_date(&get_all_todos(&path)),
+            Some(ListFilters::End) => print_list_with_completion_date(&get_completed_todos(&path)),
+            None => print_list(&get_todos(&path)),
+        },
         Commands::Done(check_args) => complete_todos(&path, &check_args.ids),
         Commands::Undone(check_args) => uncheck_todos(&path, &check_args.ids),
         Commands::Edit(todo) => update_title(&path, &todo),
