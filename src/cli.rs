@@ -44,6 +44,7 @@ pub struct ListArgs {
 
 #[derive(Args, Debug)]
 pub struct IdsArgs {
+    #[arg(required = true)]
     pub ids: Vec<u32>,
 }
 
