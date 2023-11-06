@@ -3,4 +3,5 @@ INSERT INTO
 VALUES
   ("This is the sample To-Do", 0, NULL, 0),
   ("Completed To-Do sample", 1, CURRENT_TIMESTAMP, 0),
-  ("Deleted", 0, NULL, 1);
+  ("Deleted", 0, NULL, 1),
+  ("Deleted and completed", 1, CURRENT_TIMESTAMP, 1);
