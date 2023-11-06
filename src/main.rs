@@ -29,8 +29,8 @@ fn main() {
             Some(ListFilters::End) => print_list_with_completion_date(&get_completed_todos(&path)),
             None => print_list(&get_todos(&path)),
         },
-        Commands::Done(check_args) => complete_todos(&path, &check_args.ids),
-        Commands::Undone(check_args) => uncheck_todos(&path, &check_args.ids),
+        Commands::Done(ids_args) => complete_todos(&path, &ids_args.ids),
+        Commands::Undone(ids_args) => uncheck_todos(&path, &ids_args.ids),
         Commands::Edit(todo) => update_title(&path, &todo),
         Commands::Reset => {
             if propmt_user("WARNING: this operation cannot be undone and every data will be permanently deleted: [y/N]").unwrap() == Some(PromptResult::Yes)

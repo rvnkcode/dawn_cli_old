@@ -15,9 +15,9 @@ pub enum Commands {
     /// List To-Dos
     Ls(ListArgs),
     /// Complete To-Dos
-    Done(CheckArgs),
+    Done(IdsArgs),
     /// Revert To-Dos to an unfinished state
-    Undone(CheckArgs),
+    Undone(IdsArgs),
     /// Modify a To-Do
     Edit(EditArgs),
     /// Reset DB
@@ -41,7 +41,7 @@ pub struct ListArgs {
 }
 
 #[derive(Args, Debug)]
-pub struct CheckArgs {
+pub struct IdsArgs {
     pub ids: Vec<u32>,
 }
 
