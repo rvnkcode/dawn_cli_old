@@ -5,7 +5,7 @@ use crate::todo::Todo;
 pub fn print_list(list: &Vec<Todo>) {
     let mut table = Table::new();
     table.set_format(*format::consts::FORMAT_CLEAN);
-    table.set_titles(row!["ID", "Title"]);
+    table.set_titles(row![u => "ID", "Title"]);
 
     for todo in list {
         table.add_row(row![&todo.id, &todo.title]);
@@ -17,7 +17,7 @@ pub fn print_list(list: &Vec<Todo>) {
 pub fn print_list_with_note(list: &Vec<Todo>) {
     let mut table = Table::new();
     table.set_format(*format::consts::FORMAT_CLEAN);
-    table.set_titles(row!["ID", "Title", "Note"]);
+    table.set_titles(row![u => "ID", "Title", "Note"]);
 
     for todo in list {
         table.add_row(row![
@@ -37,7 +37,7 @@ pub fn print_list_with_note(list: &Vec<Todo>) {
 pub fn print_list_with_details(list: &Vec<Todo>) {
     let mut table = Table::new();
     table.set_format(*format::consts::FORMAT_CLEAN);
-    table.set_titles(row!["ID", "St", "Title", "Note", "Completion Date"]);
+    table.set_titles(row![u=> "ID", "St", "Title", "Note", "Completion Date"]);
 
     for todo in list {
         table.add_row(row![
