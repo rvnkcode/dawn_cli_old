@@ -9,7 +9,7 @@ CREATE TABLE
     is_deleted BOOLEAN DEFAULT 0
   );
 
-CREATE TRIGGER updated_at_todo
+CREATE TRIGGER IF NOT EXISTS updated_at_todo
 UPDATE OF title,
 is_completed ON todo BEGIN
 UPDATE todo
@@ -20,7 +20,7 @@ WHERE
 
 END;
 
-CREATE TRIGGER completed_at_todo
+CREATE TRIGGER IF NOT EXISTS completed_at_todo
 UPDATE OF is_completed ON todo BEGIN
 UPDATE todo
 SET
