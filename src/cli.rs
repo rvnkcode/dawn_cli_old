@@ -13,7 +13,7 @@ pub enum Commands {
     /// Add a new To-Do
     Add(AddArgs),
     /// List To-Dos
-    Ls,
+    Ls(ListArgs),
     /// List all To-Dos
     All,
     /// List completed To-Dos
@@ -42,6 +42,12 @@ pub struct AddArgs {
     pub title: String,
     #[arg(short, long, default_value_t = false)]
     pub check: bool,
+}
+
+#[derive(Args)]
+pub struct ListArgs {
+    #[arg(short, long)]
+    pub note: bool,
 }
 
 #[derive(Args, Debug)]

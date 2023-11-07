@@ -6,7 +6,7 @@ use db::{
     get_deleted_todos, get_todos, initialize_db, reset_db, restore_seeds, uncheck_todos,
     update_title,
 };
-use table::{print_list, print_list_with_completion_date};
+use table::{print_list, print_list_with_completion_date, print_list_with_note};
 
 mod cli;
 mod config;
@@ -24,7 +24,13 @@ fn main() {
     let cli = Cli::parse();
     match &cli.command {
         Commands::Add(todo) => create_todo(&todo, &path),
-        Commands::Ls => print_list(&get_todos(&path)),
+        Commands::Ls(args) => {
+            if args.note {
+                print_list_with_note(&get_todos(&path));
+            } else {
+                print_list(&get_todos(&path))
+            }
+        },
         Commands::All => print_list_with_completion_date(&get_all_todos(&path)),
         Commands::Completed => print_list_with_completion_date(&get_completed_todos(&path)),
         Commands::Trash => print_list(&get_deleted_todos(&path)),

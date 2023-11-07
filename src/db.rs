@@ -38,7 +38,7 @@ pub fn create_todo(todo: &AddArgs, path: &PathBuf) {
 pub fn get_todos(path: &PathBuf) -> Vec<Todo> {
     let conn = Connection::open(&path).unwrap();
     let mut stmt = conn
-        .prepare("SELECT id, title FROM todo WHERE is_completed = 0 AND is_deleted = 0")
+        .prepare("SELECT id, title, note FROM todo WHERE is_completed = 0 AND is_deleted = 0")
         .unwrap();
 
     stmt.query_map([], |row| {
@@ -46,6 +46,7 @@ pub fn get_todos(path: &PathBuf) -> Vec<Todo> {
             id: row.get(0)?,
             title: row.get(1)?,
             completed_at: None,
+            note: row.get(2)?,
         })
     })
     .unwrap()
@@ -56,7 +57,7 @@ pub fn get_todos(path: &PathBuf) -> Vec<Todo> {
 pub fn get_all_todos(path: &PathBuf) -> Vec<Todo> {
     let conn = Connection::open(&path).unwrap();
     let mut stmt = conn
-        .prepare("SELECT id, title, completed_at FROM todo WHERE is_deleted = 0")
+        .prepare("SELECT id, title, completed_at, note FROM todo WHERE is_deleted = 0")
         .unwrap();
 
     stmt.query_map([], |row| {
@@ -64,6 +65,7 @@ pub fn get_all_todos(path: &PathBuf) -> Vec<Todo> {
             id: row.get(0)?,
             title: row.get(1)?,
             completed_at: row.get(2)?,
+            note: row.get(3)?,
         })
     })
     .unwrap()
@@ -75,7 +77,7 @@ pub fn get_completed_todos(path: &PathBuf) -> Vec<Todo> {
     let conn = Connection::open(&path).unwrap();
     let mut stmt = conn
         .prepare(
-            "SELECT id, title, completed_at FROM todo WHERE is_completed = 1 AND is_deleted = 0",
+            "SELECT id, title, completed_at, note FROM todo WHERE is_completed = 1 AND is_deleted = 0",
         )
         .unwrap();
 
@@ -84,6 +86,7 @@ pub fn get_completed_todos(path: &PathBuf) -> Vec<Todo> {
             id: row.get(0)?,
             title: row.get(1)?,
             completed_at: row.get(2)?,
+            note: row.get(3)?,
         })
     })
     .unwrap()
@@ -94,7 +97,7 @@ pub fn get_completed_todos(path: &PathBuf) -> Vec<Todo> {
 pub fn get_deleted_todos(path: &PathBuf) -> Vec<Todo> {
     let conn = Connection::open(&path).unwrap();
     let mut stmt = conn
-        .prepare("SELECT id, title FROM todo WHERE is_deleted = 1")
+        .prepare("SELECT id, title, note FROM todo WHERE is_deleted = 1")
         .unwrap();
 
     stmt.query_map([], |row| {
@@ -102,6 +105,7 @@ pub fn get_deleted_todos(path: &PathBuf) -> Vec<Todo> {
             id: row.get(0)?,
             title: row.get(1)?,
             completed_at: None,
+            note: row.get(2)?,
         })
     })
     .unwrap()
