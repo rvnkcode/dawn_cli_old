@@ -1,7 +1,7 @@
 INSERT INTO
-  todo (title, is_completed, completed_at, is_deleted)
+  todo (title, note, is_completed, completed_at, is_deleted)
 VALUES
-  ("This is the sample To-Do", 0, NULL, 0),
-  ("Completed To-Do sample", 1, CURRENT_TIMESTAMP, 0),
-  ("Deleted", 0, NULL, 1),
-  ("Deleted and completed", 1, CURRENT_TIMESTAMP, 1);
+  ("This is the sample To-Do", "Note test", 0, NULL, 0),
+  ("Completed To-Do sample", NULL, 1, CURRENT_TIMESTAMP, 0),
+  ("Deleted", NULL, 0, NULL, 1),
+  ("Deleted and completed", NULL, 1, CURRENT_TIMESTAMP, 1);
