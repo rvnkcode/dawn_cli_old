@@ -18,8 +18,8 @@ pub fn initialize_db(path: &PathBuf) {
 pub fn create_todo(todo: &AddArgs, path: &PathBuf) {
     let conn = Connection::open(&path).unwrap();
     conn.execute(
-        "INSERT INTO todo (title, is_completed) VALUES (?1, ?2)",
-        (&todo.title, &todo.check),
+        "INSERT INTO todo (title, is_completed, note) VALUES (?1, ?2, ?3)",
+        (&todo.title, &todo.check, &todo.note),
     )
     .expect("Failed to create To-Do");
 

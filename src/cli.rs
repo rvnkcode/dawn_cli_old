@@ -42,6 +42,8 @@ pub struct AddArgs {
     pub title: String,
     #[arg(short, long, default_value_t = false)]
     pub check: bool,
+    #[arg(short, long)]
+    pub note: Option<String>,
 }
 
 #[derive(Args)]
