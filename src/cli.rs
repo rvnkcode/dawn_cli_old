@@ -28,6 +28,8 @@ pub enum Commands {
     Modify(EditArgs),
     /// Delete To-Dos
     Delete(IdsArgs),
+    /// Permanently delete trashed To-Dos
+    Clean,
     /// Reset DB
     Reset,
     /// Reset DB and restore seed. Only for development!

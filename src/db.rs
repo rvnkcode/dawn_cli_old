@@ -187,6 +187,12 @@ pub fn delete_todos(path: &PathBuf, ids: &Vec<u32>) {
     }
 }
 
+pub fn empty_trash(path: &PathBuf) {
+    let conn = Connection::open(&path).unwrap();
+    conn.execute("DELETE FROM todo WHERE is_deleted = 1", ())
+        .expect("Clean up failed");
+}
+
 pub fn reset_db(path: &PathBuf) {
     let mut conn = Connection::open(&path).unwrap();
     let tx = conn.transaction().unwrap();
