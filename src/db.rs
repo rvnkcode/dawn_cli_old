@@ -85,7 +85,7 @@ pub fn get_completed_todos(path: &PathBuf) -> Vec<Todo> {
     .collect::<Vec<Todo>>()
 }
 
-pub fn is_todo_exists(conn: &Connection, id: &u32) -> bool {
+fn is_todo_exists(conn: &Connection, id: &u32) -> bool {
     conn.query_row(
         "SELECT EXISTS(SELECT 1 FROM todo WHERE id = (?1) AND is_deleted = 0)",
         [&id],
