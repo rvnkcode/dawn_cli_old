@@ -25,7 +25,7 @@ pub enum Commands {
     /// Revert To-Dos to an unfinished state
     Undone(IdsArgs),
     /// Modify a To-Do
-    Edit(EditArgs),
+    Modify(EditArgs),
     /// Delete To-Dos
     Delete(IdsArgs),
     /// Reset DB

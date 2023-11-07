@@ -29,7 +29,7 @@ fn main() {
         Commands::Trash => print_list(&get_deleted_todos(&path)),
         Commands::Done(ids_args) => complete_todos(&path, &ids_args.ids),
         Commands::Undone(ids_args) => uncheck_todos(&path, &ids_args.ids),
-        Commands::Edit(todo) => update_title(&path, &todo),
+        Commands::Modify(todo) => update_title(&path, &todo),
         Commands::Delete(ids_args) => delete_todos(&path, &ids_args.ids),
         Commands::Reset => {
             if propmt_user("WARNING: this operation cannot be undone and every data will be permanently deleted: [y/N]").unwrap() == Some(PromptResult::Yes)
