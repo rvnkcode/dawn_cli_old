@@ -16,3 +16,7 @@ clap = { version = "4.4.7", features = ["derive"] }
 dirs = "5.0.1"
 rusqlite = { version = "0.29.0", features = ["bundled", "chrono"] }
 prettytable-rs = "^0.10"
+
+[[bin]]
+name = "dawn"
+path = "src/main.rs"
