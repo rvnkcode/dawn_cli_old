@@ -6,9 +6,12 @@ use rusqlite::{params_from_iter, Connection};
 use std::path::PathBuf;
 
 pub fn initialize_db(path: &PathBuf) {
-    let conn = Connection::open(&path).unwrap();
-    conn.execute_batch(include_str!("./sql/schema.sql"))
+    let mut conn = Connection::open(&path).unwrap();
+    let tx = conn.transaction().unwrap();
+
+    tx.execute_batch(include_str!("./sql/schema.sql"))
         .expect("Table creation failed");
+    tx.commit().ok();
 }
 
 // Create
