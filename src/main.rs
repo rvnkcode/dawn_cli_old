@@ -3,12 +3,12 @@ use cli::{propmt_user, Cli, Commands, PromptResult};
 use config::{check_directory, define_directory};
 use db::{
     complete_todos, create_todo, delete_todos, empty_trash, get_all_todos, get_completed_todos,
-    get_deleted_todos, get_todos, initialize_db, reset_db, restore_seeds, uncheck_todos,
-    update_title,
+    get_deleted_todos, get_detail_of_todo, get_todos, initialize_db, reset_db, restore_seeds,
+    uncheck_todos, update_title,
 };
 use table::{
-    print_list, print_list_with_completion_date, print_list_with_completion_date_note,
-    print_list_with_note,
+    print_detail_of_todo, print_list, print_list_with_completion_date,
+    print_list_with_completion_date_note, print_list_with_note,
 };
 
 mod cli;
@@ -61,6 +61,9 @@ fn main() {
                 print_list_with_completion_date(&list);
             }
         },
+        Commands::Show { id } => {
+            print_detail_of_todo(&get_detail_of_todo(&path, &id));
+        }
         // Update
         Commands::Done(ids_args) => complete_todos(&path, &ids_args.ids),
         Commands::Undone(ids_args) => uncheck_todos(&path, &ids_args.ids),

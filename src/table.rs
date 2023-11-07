@@ -84,3 +84,43 @@ pub fn print_list_with_completion_date_note(list: &Vec<Todo>) {
 
     table.printstd();
 }
+
+pub fn print_detail_of_todo(todo: &Todo) {
+    let mut table = Table::new();
+    table.set_format(*format::consts::FORMAT_CLEAN);
+
+    table.add_row(row!["ID", &todo.id]);
+    table.add_row(row!["Title", &todo.title]);
+    table.add_row(row![
+        "Note",
+        if todo.note.is_some() {
+            todo.note.clone().unwrap()
+        } else {
+            "".to_string()
+        }
+    ]);
+    table.add_row(row![
+        "Creation Date",
+        if todo.created_at.is_some() {
+            todo.created_at
+                .unwrap()
+                .format("%Y-%m-%d %H:%M")
+                .to_string()
+        } else {
+            "".to_string()
+        }
+    ]);
+    table.add_row(row![
+        "Completion Date",
+        if todo.completed_at.is_some() {
+            todo.completed_at
+                .unwrap()
+                .format("%Y-%m-%d %H:%M")
+                .to_string()
+        } else {
+            "".to_string()
+        }
+    ]);
+
+    table.printstd();
+}

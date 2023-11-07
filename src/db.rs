@@ -47,6 +47,7 @@ pub fn get_todos(path: &PathBuf) -> Vec<Todo> {
             title: row.get(1)?,
             completed_at: None,
             note: row.get(2)?,
+            created_at: None,
         })
     })
     .unwrap()
@@ -66,6 +67,7 @@ pub fn get_all_todos(path: &PathBuf) -> Vec<Todo> {
             title: row.get(1)?,
             completed_at: row.get(2)?,
             note: row.get(3)?,
+            created_at: None,
         })
     })
     .unwrap()
@@ -87,6 +89,7 @@ pub fn get_completed_todos(path: &PathBuf) -> Vec<Todo> {
             title: row.get(1)?,
             completed_at: row.get(2)?,
             note: row.get(3)?,
+            created_at: None,
         })
     })
     .unwrap()
@@ -106,11 +109,30 @@ pub fn get_deleted_todos(path: &PathBuf) -> Vec<Todo> {
             title: row.get(1)?,
             completed_at: None,
             note: row.get(2)?,
+            created_at: None,
         })
     })
     .unwrap()
     .map(|r| r.unwrap())
     .collect::<Vec<Todo>>()
+}
+
+pub fn get_detail_of_todo(path: &PathBuf, id: &u32) -> Todo {
+    let conn = Connection::open(&path).unwrap();
+    conn.query_row(
+        "SELECT id, title, completed_at, note, created_at FROM todo WHERE id = (?1)",
+        [&id],
+        |row| {
+            Ok(Todo {
+                id: row.get(0)?,
+                title: row.get(1)?,
+                completed_at: row.get(2)?,
+                note: row.get(3)?,
+                created_at: row.get(4)?,
+            })
+        },
+    )
+    .expect("Faild to get information of a To-Do")
 }
 
 // Update

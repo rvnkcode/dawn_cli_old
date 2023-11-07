@@ -5,5 +5,6 @@ pub struct Todo {
     pub title: String,
     pub completed_at: Option<DateTime<Local>>,
     pub note: Option<String>,
+    pub created_at: Option<DateTime<Local>>,
     // pub is_completed: bool,
 }

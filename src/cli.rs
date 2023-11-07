@@ -20,6 +20,10 @@ pub enum Commands {
     Completed(ListArgs),
     /// List deleted To-Dos
     Trash(ListArgs),
+    /// Display details of a To-Do
+    Show {
+        id: u32
+    },
     /// Complete To-Dos
     Done(IdsArgs),
     /// Revert To-Dos to an unfinished state
