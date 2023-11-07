@@ -11,6 +11,8 @@ pub fn initialize_db(path: &PathBuf) {
         .expect("Table creation failed");
 }
 
+// Create
+//
 pub fn create_todo(todo: &AddArgs, path: &PathBuf) {
     let conn = Connection::open(&path).unwrap();
     conn.execute(
@@ -29,6 +31,8 @@ pub fn create_todo(todo: &AddArgs, path: &PathBuf) {
     };
 }
 
+// Read
+//
 pub fn get_todos(path: &PathBuf) -> Vec<Todo> {
     let conn = Connection::open(&path).unwrap();
     let mut stmt = conn
@@ -103,15 +107,8 @@ pub fn get_deleted_todos(path: &PathBuf) -> Vec<Todo> {
     .collect::<Vec<Todo>>()
 }
 
-fn is_todo_exists(conn: &Connection, id: &u32) -> bool {
-    conn.query_row(
-        "SELECT EXISTS(SELECT 1 FROM todo WHERE id = (?1) AND is_deleted = 0)",
-        [&id],
-        |row| row.get(0),
-    )
-    .unwrap()
-}
-
+// Update
+//
 pub fn complete_todos(path: &PathBuf, ids: &Vec<u32>) {
     let mut result = ids.clone();
     let conn = Connection::open(&path).unwrap();
@@ -166,6 +163,8 @@ pub fn update_title(path: &PathBuf, todo: &EditArgs) {
     }
 }
 
+// Delete
+//
 pub fn delete_todos(path: &PathBuf, ids: &Vec<u32>) {
     let mut result = ids.clone();
     let conn = Connection::open(&path).unwrap();
@@ -185,6 +184,14 @@ pub fn delete_todos(path: &PathBuf, ids: &Vec<u32>) {
     }
 }
 
+pub fn reset_db(path: &PathBuf) {
+    let conn = Connection::open(&path).unwrap();
+    conn.execute("DELETE FROM todo", ()).ok();
+    println!("...DB reset completed")
+}
+
+// Development
+//
 pub fn restore_seeds(path: &PathBuf) {
     let conn = Connection::open(&path).unwrap();
     reset_db_before_seeding(&conn);
@@ -206,12 +213,8 @@ fn seeding(conn: &Connection) {
     }
 }
 
-pub fn reset_db(path: &PathBuf) {
-    let conn = Connection::open(&path).unwrap();
-    conn.execute("DELETE FROM todo", ()).ok();
-    println!("...DB reset completed")
-}
-
+// Helper functions
+//
 // Ref: https://docs.rs/rusqlite/latest/rusqlite/struct.ParamsFromIter.html#realistic-use-case
 fn repeat_vars(count: usize) -> String {
     assert_ne!(count, 0);
@@ -219,4 +222,13 @@ fn repeat_vars(count: usize) -> String {
     // Remove trailing comma
     s.pop();
     s
+}
+
+fn is_todo_exists(conn: &Connection, id: &u32) -> bool {
+    conn.query_row(
+        "SELECT EXISTS(SELECT 1 FROM todo WHERE id = (?1) AND is_deleted = 0)",
+        [&id],
+        |row| row.get(0),
+    )
+    .unwrap()
 }
