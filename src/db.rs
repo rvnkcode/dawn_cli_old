@@ -85,6 +85,24 @@ pub fn get_completed_todos(path: &PathBuf) -> Vec<Todo> {
     .collect::<Vec<Todo>>()
 }
 
+pub fn get_deleted_todos(path: &PathBuf) -> Vec<Todo> {
+    let conn = Connection::open(&path).unwrap();
+    let mut stmt = conn
+        .prepare("SELECT id, title FROM todo WHERE is_deleted = 1")
+        .unwrap();
+
+    stmt.query_map([], |row| {
+        Ok(Todo {
+            id: row.get(0)?,
+            title: row.get(1)?,
+            completed_at: None,
+        })
+    })
+    .unwrap()
+    .map(|r| r.unwrap())
+    .collect::<Vec<Todo>>()
+}
+
 fn is_todo_exists(conn: &Connection, id: &u32) -> bool {
     conn.query_row(
         "SELECT EXISTS(SELECT 1 FROM todo WHERE id = (?1) AND is_deleted = 0)",

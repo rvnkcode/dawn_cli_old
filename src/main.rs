@@ -3,7 +3,7 @@ use cli::{propmt_user, Cli, Commands, PromptResult};
 use config::{check_directory, define_directory};
 use db::{
     complete_todos, create_todo, delete_todos, get_all_todos, get_completed_todos, get_todos,
-    initialize_db, reset_db, restore_seeds, uncheck_todos, update_title,
+    initialize_db, reset_db, restore_seeds, uncheck_todos, update_title, get_deleted_todos,
 };
 use table::{print_list, print_list_with_completion_date};
 
@@ -26,6 +26,7 @@ fn main() {
         Commands::Ls => print_list(&get_todos(&path)),
         Commands::All => print_list_with_completion_date(&get_all_todos(&path)),
         Commands::Completed => print_list_with_completion_date(&get_completed_todos(&path)),
+        Commands::Trash => print_list(&get_deleted_todos(&path)),
         Commands::Done(ids_args) => complete_todos(&path, &ids_args.ids),
         Commands::Undone(ids_args) => uncheck_todos(&path, &ids_args.ids),
         Commands::Edit(todo) => update_title(&path, &todo),

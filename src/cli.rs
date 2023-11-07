@@ -18,6 +18,8 @@ pub enum Commands {
     All,
     /// List completed To-Dos
     Completed,
+    /// List deleted To-Dos
+    Trash,
     /// Complete To-Dos
     Done(IdsArgs),
     /// Revert To-Dos to an unfinished state
