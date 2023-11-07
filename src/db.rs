@@ -188,8 +188,14 @@ pub fn delete_todos(path: &PathBuf, ids: &Vec<u32>) {
 }
 
 pub fn reset_db(path: &PathBuf) {
-    let conn = Connection::open(&path).unwrap();
-    conn.execute("DELETE FROM todo", ()).ok();
+    let mut conn = Connection::open(&path).unwrap();
+    let tx = conn.transaction().unwrap();
+
+    tx.execute("DROP TABLE IF EXISTS todo", ()).ok();
+    tx.execute_batch(include_str!("./sql/schema.sql"))
+        .expect("Table creation failed");
+    tx.commit().ok();
+
     println!("...DB reset completed")
 }
 
