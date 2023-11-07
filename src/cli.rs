@@ -15,11 +15,11 @@ pub enum Commands {
     /// List To-Dos
     Ls(ListArgs),
     /// List all To-Dos
-    All,
+    All(ListArgs),
     /// List completed To-Dos
-    Completed,
+    Completed(ListArgs),
     /// List deleted To-Dos
-    Trash,
+    Trash(ListArgs),
     /// Complete To-Dos
     Done(IdsArgs),
     /// Revert To-Dos to an unfinished state

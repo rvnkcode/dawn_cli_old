@@ -6,7 +6,10 @@ use db::{
     get_deleted_todos, get_todos, initialize_db, reset_db, restore_seeds, uncheck_todos,
     update_title,
 };
-use table::{print_list, print_list_with_completion_date, print_list_with_note};
+use table::{
+    print_list, print_list_with_completion_date, print_list_with_completion_date_note,
+    print_list_with_note,
+};
 
 mod cli;
 mod config;
@@ -23,20 +26,46 @@ fn main() {
 
     let cli = Cli::parse();
     match &cli.command {
+        // Create
         Commands::Add(todo) => create_todo(&todo, &path),
+        // Read
         Commands::Ls(args) => {
+            let list = get_todos(&path);
             if args.note {
-                print_list_with_note(&get_todos(&path));
+                print_list_with_note(&list);
             } else {
-                print_list(&get_todos(&path))
+                print_list(&list);
             }
         },
-        Commands::All => print_list_with_completion_date(&get_all_todos(&path)),
-        Commands::Completed => print_list_with_completion_date(&get_completed_todos(&path)),
-        Commands::Trash => print_list(&get_deleted_todos(&path)),
+        Commands::All(args) => {
+            let list = get_all_todos(&path);
+            if args.note {
+                print_list_with_completion_date_note(&list);
+            } else {
+                print_list_with_completion_date(&list);
+            }
+        },
+        Commands::Completed(args) => {
+            let list = get_completed_todos(&path);
+            if args.note {
+                print_list_with_completion_date_note(&list);
+            } else {
+                print_list_with_completion_date(&list);
+            }
+        },
+        Commands::Trash(args) => {
+            let list = get_deleted_todos(&path);
+            if args.note {
+                print_list_with_completion_date_note(&list);
+            } else {
+                print_list_with_completion_date(&list);
+            }
+        },
+        // Update
         Commands::Done(ids_args) => complete_todos(&path, &ids_args.ids),
         Commands::Undone(ids_args) => uncheck_todos(&path, &ids_args.ids),
         Commands::Modify(todo) => update_title(&path, &todo),
+        // Delete
         Commands::Delete(ids_args) => delete_todos(&path, &ids_args.ids),
         Commands::Clean => empty_trash(&path),
         Commands::Reset => {
@@ -45,6 +74,7 @@ fn main() {
                 reset_db(&path);
             }
         }
+        // Development
         Commands::Seed => restore_seeds(&path),
     }
 }
