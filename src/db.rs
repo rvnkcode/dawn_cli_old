@@ -2,15 +2,14 @@ use crate::{
     cli::{AddArgs, EditArgs},
     todo::Todo,
 };
-use rusqlite::{params_from_iter, Connection};
+use rusqlite::{params_from_iter, Connection, Transaction};
 use std::path::PathBuf;
 
 pub fn initialize_db(path: &PathBuf) {
     let mut conn = Connection::open(&path).unwrap();
     let tx = conn.transaction().unwrap();
 
-    tx.execute_batch(include_str!("./sql/schema.sql"))
-        .expect("Table creation failed");
+    execute_schema_sql(&tx);
     tx.commit().ok();
 }
 
@@ -198,8 +197,7 @@ pub fn reset_db(path: &PathBuf) {
     let tx = conn.transaction().unwrap();
 
     tx.execute("DROP TABLE IF EXISTS todo", ()).ok();
-    tx.execute_batch(include_str!("./sql/schema.sql"))
-        .expect("Table creation failed");
+    execute_schema_sql(&tx);
     tx.commit().ok();
 
     println!("...DB reset completed")
@@ -209,12 +207,8 @@ pub fn reset_db(path: &PathBuf) {
 //
 pub fn restore_seeds(path: &PathBuf) {
     let conn = Connection::open(&path).unwrap();
-    reset_db_before_seeding(&conn);
-    seeding(&conn);
-}
-
-fn reset_db_before_seeding(conn: &Connection) {
     conn.execute("DELETE FROM todo", ()).ok();
+    seeding(&conn);
 }
 
 fn seeding(conn: &Connection) {
@@ -246,4 +240,9 @@ fn is_todo_exists(conn: &Connection, id: &u32) -> bool {
         |row| row.get(0),
     )
     .unwrap()
+}
+
+fn execute_schema_sql(tx: &Transaction) {
+    tx.execute_batch(include_str!("./sql/schema.sql"))
+        .expect("Table creation failed");
 }
