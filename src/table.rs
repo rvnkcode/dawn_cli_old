@@ -29,7 +29,7 @@ pub fn print_list_with_completion_date(list: &Vec<Todo>) {
                     .format("%Y-%m-%d %H:%M")
                     .to_string()
             } else {
-                "-".to_string()
+                "".to_string()
             }
         ]);
     }
