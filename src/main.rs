@@ -1,4 +1,3 @@
-use crate::cli::ListFilters;
 use clap::Parser;
 use cli::{propmt_user, Cli, Commands, PromptResult};
 use config::{check_directory, define_directory};
@@ -24,11 +23,9 @@ fn main() {
     let cli = Cli::parse();
     match &cli.command {
         Commands::Add(todo) => create_todo(&todo, &path),
-        Commands::Ls(list_args) => match &list_args.filter {
-            Some(ListFilters::All) => print_list_with_completion_date(&get_all_todos(&path)),
-            Some(ListFilters::End) => print_list_with_completion_date(&get_completed_todos(&path)),
-            None => print_list(&get_todos(&path)),
-        },
+        Commands::Ls => print_list(&get_todos(&path)),
+        Commands::All => print_list_with_completion_date(&get_all_todos(&path)),
+        Commands::Completed => print_list_with_completion_date(&get_completed_todos(&path)),
         Commands::Done(ids_args) => complete_todos(&path, &ids_args.ids),
         Commands::Undone(ids_args) => uncheck_todos(&path, &ids_args.ids),
         Commands::Edit(todo) => update_title(&path, &todo),

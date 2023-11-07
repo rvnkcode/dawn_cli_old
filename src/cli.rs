@@ -1,4 +1,4 @@
-use clap::{Args, Parser, Subcommand, ValueEnum};
+use clap::{Args, Parser, Subcommand};
 use std::io::{stdin, stdout, Result, Write};
 
 #[derive(Parser)]
@@ -13,7 +13,11 @@ pub enum Commands {
     /// Add a new To-Do
     Add(AddArgs),
     /// List To-Dos
-    Ls(ListArgs),
+    Ls,
+    /// List all To-Dos
+    All,
+    /// List completed To-Dos
+    Completed,
     /// Complete To-Dos
     Done(IdsArgs),
     /// Revert To-Dos to an unfinished state
@@ -37,21 +41,9 @@ pub struct AddArgs {
 }
 
 #[derive(Args, Debug)]
-pub struct ListArgs {
-    #[arg(value_enum, short)]
-    pub filter: Option<ListFilters>,
-}
-
-#[derive(Args, Debug)]
 pub struct IdsArgs {
     #[arg(required = true)]
     pub ids: Vec<u32>,
-}
-
-#[derive(ValueEnum, Clone, Debug)]
-pub enum ListFilters {
-    All,
-    End,
 }
 
 #[derive(Args)]
