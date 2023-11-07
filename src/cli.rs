@@ -15,11 +15,11 @@ pub enum Commands {
     /// List To-Dos
     Ls(ListArgs),
     /// List all To-Dos
-    All(ListArgs),
+    All,
     /// List completed To-Dos
-    Completed(ListArgs),
+    Completed,
     /// List deleted To-Dos
-    Trash(ListArgs),
+    Trash,
     /// Display details of a To-Do
     Show {
         id: u32

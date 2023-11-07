@@ -6,10 +6,7 @@ use db::{
     get_deleted_todos, get_detail_of_todo, get_todos, initialize_db, reset_db, restore_seeds,
     uncheck_todos, update_title,
 };
-use table::{
-    print_detail_of_todo, print_list, print_list_with_completion_date,
-    print_list_with_completion_date_note, print_list_with_note,
-};
+use table::{print_detail_of_todo, print_list, print_list_with_details, print_list_with_note};
 
 mod cli;
 mod config;
@@ -37,30 +34,9 @@ fn main() {
                 print_list(&list);
             }
         },
-        Commands::All(args) => {
-            let list = get_all_todos(&path);
-            if args.note {
-                print_list_with_completion_date_note(&list);
-            } else {
-                print_list_with_completion_date(&list);
-            }
-        },
-        Commands::Completed(args) => {
-            let list = get_completed_todos(&path);
-            if args.note {
-                print_list_with_completion_date_note(&list);
-            } else {
-                print_list_with_completion_date(&list);
-            }
-        },
-        Commands::Trash(args) => {
-            let list = get_deleted_todos(&path);
-            if args.note {
-                print_list_with_completion_date_note(&list);
-            } else {
-                print_list_with_completion_date(&list);
-            }
-        },
+        Commands::All => print_list_with_details(&get_all_todos(&path)),
+        Commands::Completed => print_list_with_details(&get_completed_todos(&path)),
+        Commands::Trash => print_list_with_details(&get_deleted_todos(&path)),
         Commands::Show { id } => {
             print_detail_of_todo(&get_detail_of_todo(&path, &id));
         }
